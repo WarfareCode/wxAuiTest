@@ -30,6 +30,7 @@ public:
 private:
 
 	wxAuiManager m_mgr;
+	CScintillaPanel* m_pEditor;
 
 	void OnFileOpen(wxCommandEvent& WXUNUSED(event));
 	void OnExit(wxCommandEvent& WXUNUSED(event));
@@ -112,13 +113,13 @@ void CMyFrame::Init()
 		CloseButton(true).MaximizeButton(true));
 
 
-	CScintillaPanel* pScintilla = new CScintillaPanel(this, wxID_ANY,
+	m_pEditor = new CScintillaPanel(this, wxID_ANY,
 		wxPoint(0, 0), wxSize(600, 300),
 		wxTR_DEFAULT_STYLE | wxNO_BORDER);
 
-	pScintilla->Initialise(GetModuleHandle(NULL));
+	m_pEditor->Initialise(GetModuleHandle(NULL));
 
-	m_mgr.AddPane(pScintilla, wxAuiPaneInfo().
+	m_mgr.AddPane(m_pEditor, wxAuiPaneInfo().
 		Name(wxT("editor")).Caption(wxT("Scintilla Editor")).Center().
 		CloseButton(true).MaximizeButton(true));
 
@@ -233,7 +234,7 @@ wxPoint CMyFrame::GetStartPosition()
 
 void CMyFrame::OnFileOpen(wxCommandEvent& WXUNUSED(event))
 {
-	int n = 0;
+	wxString s = m_pEditor->GetAllText();
 }
 
 void CMyFrame::OnExit(wxCommandEvent& WXUNUSED(event))

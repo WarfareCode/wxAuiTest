@@ -25,6 +25,7 @@ public:
 	void AddText(const wxString& text);
 	void SetModEventMask(int mask);
 	int GetModEventMask();
+	wxString GetAllText();
 	void SetNotificationHandler(ScintillaNotify handler);
 
 

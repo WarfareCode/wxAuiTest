@@ -241,4 +241,14 @@ void CScintillaPanel::SetNotificationHandler(ScintillaNotify handler)
 	m_handler = handler;
 }
 
+wxString CScintillaPanel::GetAllText()
+{
+	int len = (int)SendEditor(SCI_GETLENGTH);
+	char* buff = (char*)malloc(len + 1);
+	int len1 = SendEditor(SCI_GETTEXT, (WPARAM)len + 1, (LPARAM)buff);
+	wxString str(buff);
+	return str;
+
+}
+
 
