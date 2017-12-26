@@ -2,6 +2,7 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#include <wx/wx.h>
 
 const COLORREF red = RGB(0xFF, 0, 0);
 const COLORREF offWhite = RGB(0xFF, 0xFB, 0xF0);
@@ -12,9 +13,15 @@ const COLORREF white = RGB(0xff, 0xff, 0xff);
 
 HINSTANCE CScintillaPanel::m_hLibrary = 0;
 
-CScintillaPanel::CScintillaPanel(wxFrame* pParent) : wxPanel(pParent)
+CScintillaPanel::CScintillaPanel(wxWindow *parent,
+	wxWindowID winid,
+	const wxPoint& pos,
+	const wxSize& size,
+	long style,
+	const wxString& name)
+	: wxPanel(parent, winid, pos, size, style, name)
 {
-	m_pParent = pParent;
+	m_pParent = parent;
 	m_fn = NULL;
 	m_ptr = NULL;
 	m_handler = NULL;
@@ -24,31 +31,16 @@ CScintillaPanel::~CScintillaPanel()
 {
 }
 
-
-// static
-CScintillaPanel* CScintillaPanel::CreatePanel(HINSTANCE app, wxFrame* pParent)
-{
-	if (m_hLibrary == 0)
-	{
-		m_hLibrary = ::LoadLibrary(_T("SciLexer.DLL"));
-		//m_hLibrary = ::LoadLibrary(_T("D:\\_Rick's\\Scintilla\\Project2\\SciLexer.DLL"));
-	}
-
-	assert(m_hLibrary);
-
-	CScintillaPanel* pPanel = NULL;
-	if (m_hLibrary != 0)
-	{
-		pPanel = new CScintillaPanel(pParent);
-		pPanel->Initialise(app);
-	}
-
-	return pPanel;
-}
-
 bool CScintillaPanel::Initialise(HINSTANCE app)
 {
 	m_app = app;
+
+	// load DLL
+	if (m_hLibrary == 0)
+	{
+		m_hLibrary = ::LoadLibrary(_T("SciLexer.DLL"));
+	}
+	assert(m_hLibrary);
 
 	m_scintilla = ::CreateWindow(
 		_T("Scintilla"),
@@ -67,16 +59,15 @@ bool CScintillaPanel::Initialise(HINSTANCE app)
 
 	ConfigureEditor();
 
-	::ShowWindow(m_scintilla, SW_SHOW);
-	::SetFocus(m_scintilla);
+	//::ShowWindow(m_scintilla, SW_SHOW);
+	//::SetFocus(m_scintilla);
 
+	//// Update the style so the calc window is embedded in our main window
+	//::SetWindowLong(m_scintilla, GWL_STYLE, GetWindowLong(m_scintilla, GWL_STYLE) | WS_CHILD);
 
-	// Update the style so the calc window is embedded in our main window
-	::SetWindowLong(m_scintilla, GWL_STYLE, GetWindowLong(m_scintilla, GWL_STYLE) | WS_CHILD);
-
-	// We need to update the position as well since changing the parent does not
-	// adjust it automatically.
-	::SetWindowPos(m_scintilla, NULL, 0, 0, 200, 200, SWP_SHOWWINDOW);
+	//// We need to update the position as well since changing the parent does not
+	//// adjust it automatically.
+	//::SetWindowPos(m_scintilla, NULL, 0, 0, 200, 200, SWP_SHOWWINDOW);
 
 	// event handlers
 	Bind(wxEVT_SIZE, &CScintillaPanel::OnSize, this);

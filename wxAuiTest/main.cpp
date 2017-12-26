@@ -4,6 +4,7 @@
 #include "wx/treectrl.h"
 #include "wx/artprov.h"
 #include "ScintillaPanel.h"
+#include "MyPanel.h"
 
 class CMyFrame : public wxFrame
 {
@@ -87,11 +88,29 @@ void CMyFrame::Init()
 
 	m_mgr.Update();
 
-	CScintillaPanel* pScintilla = CScintillaPanel::CreatePanel(GetModuleHandle(NULL), this);
+	CMyPanel* pPanel = new CMyPanel(this, wxID_ANY,
+			wxPoint(0, 0), wxSize(160, 250),
+			wxTR_DEFAULT_STYLE | wxNO_BORDER);
+
+	m_mgr.AddPane(pPanel, wxAuiPaneInfo().
+		Name(wxT("panel")).Caption(wxT("Panel")).
+		Bottom().Layer(1).Position(1).
+		CloseButton(true).MaximizeButton(true));
+
+
+	CScintillaPanel* pScintilla = new CScintillaPanel(this, wxID_ANY,
+		wxPoint(0, 0), wxSize(300, 300),
+		wxTR_DEFAULT_STYLE | wxNO_BORDER);
+
+	pScintilla->Initialise(GetModuleHandle(NULL));
 
 	m_mgr.AddPane(pScintilla, wxAuiPaneInfo().
-		Name(wxT("test10")).Caption(wxT("Scintilla Editor")).
-		Top().Layer(1).Position(1));
+		Name(wxT("editor")).Caption(wxT("Scintilla Editor")).
+		Right().Layer(1).Position(1).
+		CloseButton(true).MaximizeButton(true));
+
+
+	m_mgr.Update();
 
 
 }

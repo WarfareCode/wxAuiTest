@@ -1,17 +1,24 @@
 #pragma once
 
 #include <wx/wx.h>
+
 struct SCNotification;
 
 class CScintillaPanel : public wxPanel
 {
 public:
-	CScintillaPanel(wxFrame* pParent);
+
+	CScintillaPanel(wxWindow *parent,
+		wxWindowID winid = wxID_ANY,
+		const wxPoint& pos = wxDefaultPosition,
+		const wxSize& size = wxDefaultSize,
+		long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+		const wxString& name = wxPanelNameStr);
+
 	~CScintillaPanel();
 
 	typedef void (*ScintillaNotify)(int code, const SCNotification* info);
 
-	static CScintillaPanel* CreatePanel(HINSTANCE app, wxFrame* pParent);
 	bool Initialise(HINSTANCE app);
 	LRESULT SendEditor(UINT Msg, WPARAM wParam = 0, LPARAM lParam = 0);
 	void SetAStyle(int style, COLORREF fore, COLORREF back = RGB(255, 255, 255), int size = -1, const TCHAR *face = 0);
@@ -35,7 +42,7 @@ private:
 	static HINSTANCE	m_hLibrary;
 	HINSTANCE			m_app;
 	HWND				m_scintilla;
-	wxFrame*			m_pParent;
+	wxWindow*			m_pParent;
 	ScintillaNotify		m_handler;
 
 	// direct call to scintilla

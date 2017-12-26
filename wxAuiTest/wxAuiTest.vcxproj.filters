@@ -21,9 +21,15 @@
     <ClCompile Include="..\..\..\..\_Rick%27s\Scintilla\wxAuiTest\wxAuiTest\ScintillaPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\_Rick%27s\Scintilla\wxAuiTest\wxAuiTest\MyPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\_Rick%27s\Scintilla\wxAuiTest\wxAuiTest\ScintillaPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\_Rick%27s\Scintilla\wxAuiTest\wxAuiTest\MyPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

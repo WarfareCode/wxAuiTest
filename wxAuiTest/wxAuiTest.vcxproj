@@ -145,9 +145,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\_Rick%27s\Scintilla\wxAuiTest\wxAuiTest\main.cpp" />
+    <ClCompile Include="..\..\..\..\_Rick%27s\Scintilla\wxAuiTest\wxAuiTest\MyPanel.cpp" />
     <ClCompile Include="..\..\..\..\_Rick%27s\Scintilla\wxAuiTest\wxAuiTest\ScintillaPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\_Rick%27s\Scintilla\wxAuiTest\wxAuiTest\MyPanel.h" />
     <ClInclude Include="..\..\..\..\_Rick%27s\Scintilla\wxAuiTest\wxAuiTest\ScintillaPanel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
