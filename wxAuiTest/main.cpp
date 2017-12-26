@@ -24,9 +24,23 @@ public:
 	wxTreeCtrl* CreateTreeCtrl();
 	wxPoint GetStartPosition();
 
+	wxDECLARE_EVENT_TABLE();
+
+
 private:
 
 	wxAuiManager m_mgr;
+
+	void OnFileOpen(wxCommandEvent& WXUNUSED(event));
+	void OnExit(wxCommandEvent& WXUNUSED(event));
+
+
+	enum
+	{
+		ID_FileOpen = wxID_HIGHEST + 1,
+		ID_CreateText,
+		ID_GridContent,
+	};
 
 };
 
@@ -99,21 +113,51 @@ void CMyFrame::Init()
 
 
 	CScintillaPanel* pScintilla = new CScintillaPanel(this, wxID_ANY,
-		wxPoint(0, 0), wxSize(300, 300),
+		wxPoint(0, 0), wxSize(600, 300),
 		wxTR_DEFAULT_STYLE | wxNO_BORDER);
 
 	pScintilla->Initialise(GetModuleHandle(NULL));
 
 	m_mgr.AddPane(pScintilla, wxAuiPaneInfo().
-		Name(wxT("editor")).Caption(wxT("Scintilla Editor")).
-		Right().Layer(1).Position(1).
+		Name(wxT("editor")).Caption(wxT("Scintilla Editor")).Center().
 		CloseButton(true).MaximizeButton(true));
 
 
 	m_mgr.Update();
 
+	// create menu
+	wxMenuBar* mb = new wxMenuBar;
+
+	wxMenu* file_menu = new wxMenu;
+	file_menu->Append(wxID_OPEN);
+	file_menu->Append(wxID_EXIT);
+
+	wxMenu* view_menu = new wxMenu;
+	view_menu->Append(ID_CreateText, _("Create Text Control"));
+	view_menu->AppendSeparator();
+	view_menu->Append(ID_GridContent, _("Use a Grid for the Content Pane"));
+
+	wxMenu* help_menu = new wxMenu;
+	help_menu->Append(wxID_ABOUT);
+
+	mb->Append(file_menu, _("&File"));
+	mb->Append(view_menu, _("&View"));
+	mb->Append(help_menu, _("&Help"));
+
+	SetMenuBar(mb);
+
+
+	SetPosition(wxPoint(100, 100));
+	SetSize(wxSize(900, 700));
+
+
 
 }
+
+wxBEGIN_EVENT_TABLE(CMyFrame, wxFrame)
+	EVT_MENU(wxID_OPEN, CMyFrame::OnFileOpen)
+	EVT_MENU(wxID_EXIT, CMyFrame::OnExit)
+wxEND_EVENT_TABLE()
 
 wxTextCtrl* CMyFrame::CreateTextCtrl(const wxString& ctrl_text)
 {
@@ -185,4 +229,14 @@ wxPoint CMyFrame::GetStartPosition()
 	x += 20;
 	wxPoint pt = ClientToScreen(wxPoint(0, 0));
 	return wxPoint(pt.x + x, pt.y + x);
+}
+
+void CMyFrame::OnFileOpen(wxCommandEvent& WXUNUSED(event))
+{
+	int n = 0;
+}
+
+void CMyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
+{
+	Close(true);
 }

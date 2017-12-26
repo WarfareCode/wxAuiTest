@@ -2,6 +2,10 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#include "wx/menu.h"
+#include "wx/toolbar.h"
+#include "wx/statusbr.h"
+
 #include <wx/wx.h>
 
 const COLORREF red = RGB(0xFF, 0, 0);
@@ -59,19 +63,8 @@ bool CScintillaPanel::Initialise(HINSTANCE app)
 
 	ConfigureEditor();
 
-	//::ShowWindow(m_scintilla, SW_SHOW);
-	//::SetFocus(m_scintilla);
-
-	//// Update the style so the calc window is embedded in our main window
-	//::SetWindowLong(m_scintilla, GWL_STYLE, GetWindowLong(m_scintilla, GWL_STYLE) | WS_CHILD);
-
-	//// We need to update the position as well since changing the parent does not
-	//// adjust it automatically.
-	//::SetWindowPos(m_scintilla, NULL, 0, 0, 200, 200, SWP_SHOWWINDOW);
-
 	// event handlers
 	Bind(wxEVT_SIZE, &CScintillaPanel::OnSize, this);
-//	Bind(WM_NOTIFY, &CScintillaPanel::OnNotify, this);
 
 	return TRUE;
 }
@@ -88,9 +81,8 @@ void CScintillaPanel::ConfigureEditor()
 	SendEditor(SCI_SETKEYWORDS, 0,
 		reinterpret_cast<LPARAM>(keyWords));
 
-
 	// Set up the global default style. These attributes are used wherever no explicit choices are made.
-	SetAStyle(STYLE_DEFAULT, black, white, 11, _T("Verdana"));
+	SetAStyle(STYLE_DEFAULT, black, white, 9, _T("Consolas"));
 	SendEditor(SCI_STYLECLEARALL);	// Copies global style to all others
 
 	const COLORREF red = RGB(0xFF, 0, 0);
@@ -99,7 +91,7 @@ void CScintillaPanel::ConfigureEditor()
 	const COLORREF darkBlue = RGB(0, 0, 0x80);
 
 	// Hypertext default is used for all the document's text
-	SetAStyle(SCE_H_DEFAULT, black, white, 11, _T("Times New Roman"));
+	SetAStyle(SCE_H_DEFAULT, black, white, 9, _T("Consolas"));
 
 	// Unknown tags and attributes are highlighed in red. 
 	// If a tag is actually OK, it should be added in lower case to the htmlKeyWords string.
@@ -165,52 +157,7 @@ void CScintillaPanel::ConfigureEditor()
 	SendEditor(SCI_STYLESETFONT, SCE_HBA_COMMENTLINE,
 		reinterpret_cast<LPARAM>("Comic Sans MS"));
 
-	// If there is no need to support embedded Javascript, the following code can be dropped.
-	// Javascript will still be correctly processed but will be displayed in just the default style.
 
-	SetAStyle(SCE_HJ_START, RGB(0x80, 0x80, 0));
-	SetAStyle(SCE_HJ_DEFAULT, black);
-	SetAStyle(SCE_HJ_COMMENT, darkGreen);
-	SetAStyle(SCE_HJ_COMMENTLINE, darkGreen);
-	SetAStyle(SCE_HJ_COMMENTDOC, darkGreen);
-	SetAStyle(SCE_HJ_NUMBER, RGB(0, 0x80, 0x80));
-	SetAStyle(SCE_HJ_WORD, black);
-	SetAStyle(SCE_HJ_KEYWORD, darkBlue);
-	SetAStyle(SCE_HJ_DOUBLESTRING, RGB(0x80, 0, 0x80));
-	SetAStyle(SCE_HJ_SINGLESTRING, RGB(0x80, 0, 0x80));
-	SetAStyle(SCE_HJ_SYMBOLS, black);
-
-	SetAStyle(SCE_HJA_START, RGB(0x80, 0x80, 0));
-	SetAStyle(SCE_HJA_DEFAULT, black);
-	SetAStyle(SCE_HJA_COMMENT, darkGreen);
-	SetAStyle(SCE_HJA_COMMENTLINE, darkGreen);
-	SetAStyle(SCE_HJA_COMMENTDOC, darkGreen);
-	SetAStyle(SCE_HJA_NUMBER, RGB(0, 0x80, 0x80));
-	SetAStyle(SCE_HJA_WORD, black);
-	SetAStyle(SCE_HJA_KEYWORD, darkBlue);
-	SetAStyle(SCE_HJA_DOUBLESTRING, RGB(0x80, 0, 0x80));
-	SetAStyle(SCE_HJA_SINGLESTRING, RGB(0x80, 0, 0x80));
-	SetAStyle(SCE_HJA_SYMBOLS, black);
-
-	// Show the whole section of Javascript with off white background
-	for (int jstyle = SCE_HJ_DEFAULT; jstyle <= SCE_HJ_SYMBOLS; jstyle++) {
-		SendEditor(SCI_STYLESETFONT, jstyle,
-			reinterpret_cast<LPARAM>("Lucida Sans Unicode"));
-		SendEditor(SCI_STYLESETBACK, jstyle, offWhite);
-		SendEditor(SCI_STYLESETEOLFILLED, jstyle, 1);
-	}
-	SendEditor(SCI_STYLESETBACK, SCE_HJ_STRINGEOL, RGB(0xDF, 0xDF, 0x7F));
-	SendEditor(SCI_STYLESETEOLFILLED, SCE_HJ_STRINGEOL, 1);
-
-	// Show the whole section of Javascript with brown background
-	for (int jastyle = SCE_HJA_DEFAULT; jastyle <= SCE_HJA_SYMBOLS; jastyle++) {
-		SendEditor(SCI_STYLESETFONT, jastyle,
-			reinterpret_cast<LPARAM>("Lucida Sans Unicode"));
-		SendEditor(SCI_STYLESETBACK, jastyle, RGB(0xDF, 0xDF, 0x7F));
-		SendEditor(SCI_STYLESETEOLFILLED, jastyle, 1);
-	}
-	SendEditor(SCI_STYLESETBACK, SCE_HJA_STRINGEOL, RGB(0x0, 0xAF, 0x5F));
-	SendEditor(SCI_STYLESETEOLFILLED, SCE_HJA_STRINGEOL, 1);
 }
 
 void CScintillaPanel::SetAStyle(int style, COLORREF fore, COLORREF back, int size, const TCHAR *face) 
